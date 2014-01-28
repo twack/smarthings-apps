@@ -23,6 +23,8 @@
  *              On/Off is OK.
  *              Other dimmers should be OK.
  *  
+ * Use License: Non-Profit Open Software License version 3.0 (NPOSL-3.0)
+ *              http://opensource.org/licenses/NPOSL-3.0
  */
 preferences {
 	section("Select switches ...") {
