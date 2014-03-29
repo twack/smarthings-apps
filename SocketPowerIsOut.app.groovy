@@ -15,10 +15,9 @@ preferences {
 	section("When there's AC power loss on..."){
 		input "motion1", "capability.motionSensor", title: "Where?"
 	}
-	section("Via a push notification and a text message(optional)"){
-    	input "pushAndPhone", "enum", title: "Send Text?", required: false, metadata: [values: ["Yes","No"]]
-		input "phone1", "phone", title: "Phone Number (for Text, optional)", required: false
-		
+  	section("Notifications") {
+		input "sendPushMessage", "enum", title: "Send a push notification?", metadata: [values: ["Yes", "No"]], required: false
+		input "phone", "phone", title: "Send a Text Message?", required: false
 	}
 }
 
@@ -38,10 +37,19 @@ def onBatteryPowerHandler(evt) {
 	def msg = "${motion1.label ?: motion1.name} detected going to battery power"
     
 	log.debug "sending push"
-	sendPush(msg)
-    
-    if ( phone1 && pushAndPhone ) {
-    	log.debug "sending SMS to ${phone1}"
-    	sendSms(phone1, msg)
-    }
+	send(msg)
+}
+
+private send(msg) {
+	if(sendPushMessage != "No") {
+		log.debug("Sending push message")
+		sendPush(msg)
+	}
+
+	if(phone) {
+		log.debug("Sending text message")
+		sendSms(phone, msg)
+	}
+
+	log.debug(msg)
 }
