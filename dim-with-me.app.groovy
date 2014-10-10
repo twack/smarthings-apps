@@ -1,5 +1,5 @@
 /**
- *  DimWithMe.app.groovy
+ *  DimWithMe.v02.app.groovy
  *  Dim With Me
  *
  *  Author: todd@wackford.net
@@ -12,42 +12,54 @@
  *				twack@wackware.net
  *  Date: 		2013-11-12
  *  Version: 	0.1
+ *  			a) Created
+ *
+ *  Date: 		2014-10-09
+ *  Version: 	0.2
+ *  			a) Update with Metadata
  *  
  *  Use this program with a virtual dimmer as the master for best results.
  *
  *  This app lets the user select from a list of dimmers to act as a triggering
  *  master for other dimmers or regular switches. Regular switches come on
- *  anytime the master dimmer is on or dimmer level is set to more than 0%.
- *  of the master dimmer.
+ *  anytime the master dimmer is on or mnaster dimmer level is set to more than 0%.
+ *  of the master dimmer. They go off when the master is off.
  *
- *  Use Cases:
- *		You have a switch that does nothing much but makes a good master for 
  *  
- *
- *  Use License: Non-Profit Open Software License version 3.0 (NPOSL-3.0)
- *               http://opensource.org/licenses/NPOSL-3.0
  */
 
+
+// Automatically generated. Make future change here.
+definition(
+    name: "Dim With Me",
+    namespace: "",
+    author: "todd@wackford.net",
+    description: "Follows the dimmer level of another dimmer",
+    category: "My Apps",
+    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
+    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png"
+)
+
 preferences {
-	section("When This...") { //use this program with a virtual dimmer
+	section("When this...") { //use this program with a virtual dimmer
 		input "masters", "capability.switchLevel", 
 			multiple: false, 
 			title: "Master Dimmer Switch...", 
 			required: true
 	}
-
-	section("Then these regular switches follow...") {
-		input "slaves2", "capability.switch", 
-			multiple: true, 
-			title: "Slave Switch(es) Too...", 
-			required: false
-	}
     
-    section("Then these dimmers follow...") {
+    section("And these will follow with dimming level...") {
 		input "slaves", "capability.switchLevel", 
 			multiple: true, 
-			title: "Slave Dimmer(s) Switch Too...", 
+			title: "Slave Dimmer Switch(es)...", 
 			required: true
+	}
+    
+	section("Then these on/off switches will follow with on/off...") {
+		input "slaves2", "capability.switch", 
+			multiple: true, 
+			title: "Slave On/Off Switch(es)...", 
+			required: false
 	}
 }
 
@@ -56,6 +68,7 @@ def installed()
 	subscribe(masters, "switch.on", switchOnHandler)
     subscribe(masters, "switch.off", switchOffHandler)
     subscribe(masters, "switch.setLevel", switchSetLevelHandler)
+    subscribe(masters, "switch", switchSetLevelHandler)
 }
 
 def updated()
@@ -64,6 +77,7 @@ def updated()
 	subscribe(masters, "switch.on", switchOnHandler)
     subscribe(masters, "switch.off", switchOffHandler)
     subscribe(masters, "switch.setLevel", switchSetLevelHandler)
+    log.info "subscribed to all of switches events"
 }
 
 def switchSetLevelHandler(evt)
@@ -82,7 +96,7 @@ def switchOffHandler(evt) {
 
 def switchOnHandler(evt) {
 	log.info "switchOnHandler Event: ${evt.value}"
-    def dimmerValue = masters.latestValue("level")
+    def dimmerValue = masters.latestValue("level") //can be turned on by setting the level
     slaves?.on()
     slaves2?.on()
 }
