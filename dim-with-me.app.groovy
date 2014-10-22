@@ -1,5 +1,5 @@
 /**
- *  DimWithMe.v02.app.groovy
+ *  DimWithMe.v01.app.groovy
  *  Dim With Me
  *
  *  Author: todd@wackford.net
@@ -12,20 +12,28 @@
  *				twack@wackware.net
  *  Date: 		2013-11-12
  *  Version: 	0.1
- *  			a) Created
- *
- *  Date: 		2014-10-09
- *  Version: 	0.2
- *  			a) Update with Metadata
  *  
  *  Use this program with a virtual dimmer as the master for best results.
  *
  *  This app lets the user select from a list of dimmers to act as a triggering
  *  master for other dimmers or regular switches. Regular switches come on
- *  anytime the master dimmer is on or mnaster dimmer level is set to more than 0%.
- *  of the master dimmer. They go off when the master is off.
+ *  anytime the master dimmer is on or dimmer level is set to more than 0%.
+ *  of the master dimmer.
  *
- *  
+******************************************************************************
+ *                                Changes
+ ******************************************************************************
+ *
+ *  Change 1:	2014-10-22 (wackford)
+ *				Fixed bug in setlevelwhen on/off was coming in
+ *
+ ******************************************************************************
+                
+  Other Info:	Special thanks to Danny Kleinman at ST for helping me get the
+				state stuff figured out. The Android state filtering had me 
+                stumped.
+ *
+ ******************************************************************************
  */
 
 
@@ -47,19 +55,19 @@ preferences {
 			title: "Master Dimmer Switch...", 
 			required: true
 	}
+
+	section("Then these will follow with on/off...") {
+		input "slaves2", "capability.switch", 
+			multiple: true, 
+			title: "Slave On/Off Switch(es)...", 
+			required: false
+	}
     
     section("And these will follow with dimming level...") {
 		input "slaves", "capability.switchLevel", 
 			multiple: true, 
 			title: "Slave Dimmer Switch(es)...", 
 			required: true
-	}
-    
-	section("Then these on/off switches will follow with on/off...") {
-		input "slaves2", "capability.switch", 
-			multiple: true, 
-			title: "Slave On/Off Switch(es)...", 
-			required: false
 	}
 }
 
@@ -77,11 +85,15 @@ def updated()
 	subscribe(masters, "switch.on", switchOnHandler)
     subscribe(masters, "switch.off", switchOffHandler)
     subscribe(masters, "switch.setLevel", switchSetLevelHandler)
+    subscribe(masters, "switch", switchSetLevelHandler)
     log.info "subscribed to all of switches events"
 }
 
 def switchSetLevelHandler(evt)
 {	
+	
+	if ((evt.value == "on") || (evt.value == "off" ))
+    	return
     def level = evt.value.toFloat()
     level = level.toInteger()
     log.info "switchSetLevelHandler Event: ${level}"
