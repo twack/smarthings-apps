@@ -27,6 +27,10 @@
  *  Change 1:	2014-10-22 (wackford)
  *				Fixed bug in setlevelwhen on/off was coming in
  *
+ *  Change 2:	2014-11-01 (wackford)
+ *				added subscription to switch.level event. Shouldn't change much
+ *				but some devices only sending level event and not setLevel.
+ *
  ******************************************************************************
                 
   Other Info:	Special thanks to Danny Kleinman at ST for helping me get the
