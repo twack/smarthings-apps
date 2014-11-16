@@ -8,14 +8,13 @@
 // Automatically generated. Make future change here.
 definition(
     name: "OAuth2 Credentials Service Manager",
-    namespace: "wackford",
-    author: "todd@wackford.net",
+    namespace: "YourNameSpaceGoesHere",
+    author: "barney@rubble.com",
     description: "Connect your Cloud Devices to SmartThings using OAuth2 credential methods.",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png",
-    oauth: true
-)
+    oauth: true)
 
 preferences {
     page(name: "Credentials", title: "Fetch OAuth2 Credentials", content: "authPage", install: false)
@@ -28,15 +27,15 @@ mappings {
     // This is where you get call backs and process posted events from the vendor. This code will get errors until
     // you define a legit endpoint (below). Error example "Service Manager DOES NOT RESPOND TO UPDATED HANDLER"
     
-	//path("/vendorEvents") 	{ action: [ POST: "vendorEventsHandler", GET: "vendorEventsHandler"] }
+	//path("/vendorEvents") 	{ action: [ POST: "vendorPostEventsHandler", GET: "vendorGetEventsHandler"] }
 }
 
-private getVendorName() 	{ "Quirky Wink" }
-private getVendorAuthPath()	{ "https://winkapi.quirky.com/oauth2/authorize?" }
-private getVendorTokenPath(){ "https://winkapi.quirky.com/oauth2/token?" }
-private getVendorIcon()		{ "https://s3.amazonaws.com/smartthings-device-icons/custom/quirky/quirky-device@2x.png" }
-private getClientId() 		{ "c22d82a7fc3d6faf06dcff1bcf0feb52" } // Dan Lieberman's
-private getClientSecret() 	{ "bd44c524a1df9dce134235d174350603" }
+private getVendorName() 	{ "Super Widgets" }
+private getVendorAuthPath()	{ "https://superapi.superwidgets.com/oauth2/authorize?" }
+private getVendorTokenPath(){ "https://superapi.superwidgets.com/oauth2/token?" }
+private getVendorIcon()		{ "https://s3.amazonaws.com/smartthings-device-icons/custom/super-widgets/beertap@2x.png" }
+private getClientId() 		{ "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" } 
+private getClientSecret() 	{ "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy" }
 
 private getServerUrl() 		{ return "https://graph.api.smartthings.com" }
 
@@ -119,7 +118,7 @@ def receiveToken() {
         <!DOCTYPE html>
         <html>
         <head>
-        <meta name="viewport" content="width=640">
+        <meta name=viewport content="width=300px, height=100%">
         <title>${getVendorName()} Connection</title>
         <style type="text/css">
             @font-face {
@@ -144,7 +143,7 @@ def receiveToken() {
             }
             .container {
                 width: 560px;
-                padding: 40px;
+                padding: 0px;
                 /*background: #eee;*/
                 text-align: center;
             }
@@ -193,7 +192,7 @@ def receivedToken() {
         <!DOCTYPE html>
         <html>
         <head>
-        <meta name="viewport" content="width=640">
+        <meta name="viewport" content="100%">
         <title>Withings Connection</title>
         <style type="text/css">
             @font-face {
@@ -217,8 +216,8 @@ def receivedToken() {
                 font-style: normal;
             }
             .container {
-                width: 560px;
-                padding: 40px;
+                width: 100%;
+                padding: 0px;
                 /*background: #eee;*/
                 text-align: center;
             }
@@ -226,10 +225,10 @@ def receivedToken() {
                 vertical-align: middle;
             }
             img:nth-child(2) {
-                margin: 0 30px;
+                margin: 0 10px;
             }
             p {
-                font-size: 2.2em;
+                font-size: 1.5em;
                 font-family: 'Swiss 721 W01 Thin';
                 text-align: center;
                 color: #666666;
@@ -248,10 +247,10 @@ def receivedToken() {
         </head>
         <body>
             <div class="container">
-                <img src=""" + getVendorIcon() + """ alt="Vendor icon" />
-                <img src="https://s3.amazonaws.com/smartapp-icons/Partner/support/connected-device-icn%402x.png" alt="connected device icon" />
-                <img src="https://s3.amazonaws.com/smartapp-icons/Partner/support/st-logo%402x.png" alt="SmartThings logo" />
-                <p>Tap 'Done' to continue to Devices.</p>
+                <img src=""" + getVendorIcon() + """ alt="Vendor icon" style="width: 30%;max-height: 30%"/>
+                <img src="https://s3.amazonaws.com/smartapp-icons/Partner/support/connected-device-icn%402x.png" alt="connected device icon" style="width: 10%;max-height: 10%"/>
+                <img src="https://s3.amazonaws.com/smartapp-icons/Partner/support/st-logo%402x.png" alt="SmartThings logo" style="width: 30%;max-height: 30%"/>
+                <p>Your Quirky account is now connected to SmartThings. Tap 'Done' to continue to choose devices.</p>
 			</div>
         </body>
         </html>
