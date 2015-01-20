@@ -13,7 +13,7 @@
  */
 preferences {
 	section("When there's AC power loss on..."){
-		input "motion1", "capability.motionSensor", title: "Where?"
+		input "myDevice", "capability.battery", title: "Where?"
 	}
 	section("Via a push notification and a text message(optional)"){
     	input "pushAndPhone", "enum", title: "Send Text?", required: false, metadata: [values: ["Yes","No"]]
@@ -24,18 +24,18 @@ preferences {
 
 def installed()
 {
-	subscribe(motion1, "powerSource.battery", onBatteryPowerHandler)
+	subscribe(myDevice, "powerSource.battery", onBatteryPowerHandler)
 }
 
 def updated()
 {
 	unsubscribe()
-	subscribe(motion1, "powerSource.battery", onBatteryPowerHandler)
+	subscribe(myDevice, "powerSource.battery", onBatteryPowerHandler)
 }
 
 def onBatteryPowerHandler(evt) {
 	log.trace "$evt.value: $evt, $settings"
-	def msg = "${motion1.label ?: motion1.name} detected going to battery power"
+	def msg = "${myDevice.label ?: myDevice.name} detected going to battery power"
     
 	log.debug "sending push"
 	sendPush(msg)
