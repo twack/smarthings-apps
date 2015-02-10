@@ -26,6 +26,17 @@
  * Use License: Non-Profit Open Software License version 3.0 (NPOSL-3.0)
  *              http://opensource.org/licenses/NPOSL-3.0
  */
+// Automatically generated. Make future change here.
+definition(
+    name: "Scene Machine",
+    namespace: "",
+    author: "todd@wackford.net",
+    //description: "This app lets the user select from a list of switches or dimmers and record their currents states as a Scene. It is suggested that you name the app during install something like "Scene - Romantic Dinner" or "Scene - Movie Time". Switches can be added, removed or set at new levels by editing and updating the app from the smartphone interface.",
+    category: "My Apps",
+    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
+    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png"
+) 
+ 
 preferences {
 	section("Select switches ...") {
 		input "switches", "capability.switch", multiple: true
@@ -42,14 +53,14 @@ preferences {
 
 def installed() {
 	log.debug "Installed with settings: ${settings}"
-	subscribe(app) 
+	subscribe(app, appTouch) 
     getDeviceSettings()
 }
 
 def updated() {
 	log.debug "Updated with settings: ${settings}"
 	unsubscribe()
-    subscribe(app)
+    subscribe(app, appTouch)
     
    //if(record == "Yes") //uncomment this line to test/change stuff on the IDE
       getDeviceSettings()
