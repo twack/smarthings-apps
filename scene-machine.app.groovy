@@ -4,12 +4,14 @@
  *  Author: 	Todd Wackford
  *				twack@wackware.net
  *  Date: 		2013-06-14
- *  Version: 	1.0
+ *  Version: 	1.1
  *  
  *  Updated:    2013-07-25
  *  
- *  BF #1		Fixed bug where string null was being returned for non-dimmers and
+ *  Change #1	Fixed bug where string null was being returned for non-dimmers and
  *              was trying to assign to variable.
+ * 
+ *  Change #2	Updated setLevel setion to work with bulbs that were not defined as type "Dimmer Switch"
  *  
  *  
  *  This app lets the user select from a list of switches or dimmers and record 
@@ -28,10 +30,10 @@
  */
 // Automatically generated. Make future change here.
 definition(
-    name: "Scene Machine",
+    name: "Scene Machine Orig",
     namespace: "wackware",
     author: "todd@wackford.net",
-    //description: "This app lets the user select from a list of switches or dimmers and record their currents states as a Scene. It is suggested that you name the app during install something like "Scene - Romantic Dinner" or "Scene - Movie Time". Switches can be added, removed or set at new levels by editing and updating the app from the smartphone interface.",
+    description: "This app lets the user select from a list of switches or dimmers and record their currents states as a Scene. It is suggested that you name the app during install something like 'Scene - Romantic Dinner' or 'Scene - Movie Time'. Switches can be added removed or set at new levels by editing and updating the app from the smartphone interface.",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png"
@@ -94,12 +96,12 @@ private setScene() {
         log.info "switchState: $switchState"
         log.info "dimmerValue: $dimmerValue"
 
-		if((switchState == "on") && (switchType != "Dimmer Switch"))
+		if(switchState == "on")
         	switches[i].on()
             
-        if((switchState == "on") && (switchType == "Dimmer Switch"))
+        if(dimmerValue > 0)
             switches[i].setLevel(dimmerValue)
-         
+        
         if(switchState == "off")
         	switches[i].off()
 
@@ -113,7 +115,7 @@ private getDeviceSettings() {
     def cnt = 0
     for(myCounter in switches) {
     	switches[cnt].refresh() //this was a try to get dimmer values (bug)
-        switches[cnt].poll()
+        //switches[cnt].poll()
     	cnt++
     }
     
