@@ -46,11 +46,16 @@ def updated() {
 }
 
 def contactOpenHandler(evt) {
-    atomicState.colorVar = bulb.latestValue("color")
-    atomicState.levelVar = bulb.latestValue("level")
+    def values = [:]
+	values = [ level: bulb.latestValue("level") as Integer,
+               hex: bulb.latestValue("color"),
+               saturation: bulb.latestValue("saturation"),
+               hue: bulb.latestValue("hue")]
+               
+    atomicState.previousValues = values
+	log.info "Previous values are: ${atomicState.previousValues}"
 }
 
 def contactclosedHandler(evt) {
-	bulb.setColor([hex: atomicState.colorVar])
-    bulb.setLevel(atomicState.levelVar)
+	bulb.setColor(atomicState.previousValues)
 }
