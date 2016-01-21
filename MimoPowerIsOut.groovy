@@ -43,7 +43,7 @@ def installed()
 def updated()
 {
 	unsubscribe()
-	subscribe(myDevice, "owered.powerOff", lostPowerHandler)
+	subscribe(myDevice, "powered.powerOff", lostPowerHandler)
 }
 
 def lostPowerHandler(evt) {
