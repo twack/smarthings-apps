@@ -32,10 +32,10 @@
  *		but some devices only sending level event and not setLevel.
  *
  ******************************************************************************
-                
+				
   Other Info:	Special thanks to Danny Kleinman at ST for helping me get the
 				state stuff figured out. The Android state filtering had me 
-                stumped.
+				stumped.
  *
  ******************************************************************************
  */
@@ -43,13 +43,13 @@
 
 // Automatically generated. Make future change here.
 definition(
-    name: "Dim With Me",
-    namespace: "wackware",
-    author: "todd@wackford.net",
-    description: "Follows the dimmer level of another dimmer",
-    category: "My Apps",
-    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png"
+	name: "Dim With Me",
+	namespace: "wackware",
+	author: "todd@wackford.net",
+	description: "Follows the dimmer level of another dimmer",
+	category: "My Apps",
+	iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
+	iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png"
 )
 
 preferences {
@@ -66,7 +66,7 @@ preferences {
 			title: "Slave On/Off Switch(es)...", 
 			required: false
 	}
-    
+	
 	section("And these will follow with dimming level...") {
 		input "slaves", "capability.switchLevel", 
 			multiple: true, 
@@ -81,6 +81,8 @@ def installed()
 	subscribe(masters, "switch.off", switchOffHandler)
 	subscribe(masters, "switch.setLevel", switchSetLevelHandler)
 	subscribe(masters, "switch", switchSetLevelHandler)
+	subscribe(slaves2, "switch.on", slavesOnHandler)
+	subscribe(slaves2, "switch.off", slavesOffHandler)
 }
 
 def updated()
@@ -90,12 +92,13 @@ def updated()
 	subscribe(masters, "switch.off", switchOffHandler)
 	subscribe(masters, "switch.setLevel", switchSetLevelHandler)
 	subscribe(masters, "switch", switchSetLevelHandler)
+	subscribe(slaves2, "switch.on", slavesOnHandler)
+	subscribe(slaves2, "switch.off", slavesOffHandler)
 	log.info "subscribed to all of switches events"
 }
 
 def switchSetLevelHandler(evt)
 {	
-	
 	if ((evt.value == "on") || (evt.value == "off" ))
 		return
 	def level = evt.value.toFloat()
@@ -115,4 +118,30 @@ def switchOnHandler(evt) {
 	def dimmerValue = masters.latestValue("level") //can be turned on by setting the level
 	slaves?.on()
 	slaves2?.on()
+}
+
+def slavesOnHandler(evt) {
+	def allOn = true
+	for(slave in slaves2) {
+		if(slave.currentValue("switch") == "off") {
+			allOn = false
+			last
+		}
+	}
+	if(allOn && masters.currentValue("switch") == "off") {
+		masters.on()
+	}
+}
+
+def slavesOffHandler(evt) {
+	def allOff = true
+	for(slave in slaves2) {
+		if(slave.currentValue("switch") == "on") {
+			allOff = false
+			last
+		}
+	}
+	if(allOff && masters.currentValue("switch") == "on") {
+		masters.off()
+	}
 }
