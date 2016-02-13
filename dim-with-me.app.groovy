@@ -43,7 +43,7 @@
 
 // Automatically generated. Make future change here.
 definition(
-    name: "Dim With Me",
+    name: "Dim Proportional to Me",
     namespace: "wackware",
     author: "todd@wackford.net",
     description: "Follows the dimmer level of another dimmer",
@@ -72,6 +72,24 @@ preferences {
 			multiple: true, 
 			title: "Slave Dimmer Switch(es)...", 
 			required: true
+	}
+    section("And these will follow with 1/4 dimming level...") {
+		input "slavesquarter", "capability.switchLevel", 
+			multiple: true, 
+			title: "Slave 1/4 Dimmer Switch(es)...", 
+			required: false
+	}
+    section("And these will follow with 1/3 dimming level...") {
+		input "slavesthird", "capability.switchLevel", 
+			multiple: true, 
+			title: "Slave 1/3 Dimmer Switch(es)...", 
+			required: false
+	}
+    section("And these will follow with 1/2 dimming level...") {
+		input "slaveshalf", "capability.switchLevel", 
+			multiple: true, 
+			title: "Slave 1/2 Dimmer Switch(es)...", 
+			required: false
 	}
 }
 
@@ -102,6 +120,9 @@ def switchSetLevelHandler(evt)
 	level = level.toInteger()
 	log.info "switchSetLevelHandler Event: ${level}"
 	slaves?.setLevel(level)
+	slavesquarter?.setLevel(level/4)
+	slavesthird?.setLevel(level/3)
+	slaveshalf?.setLevel(level/2)
 }
 
 def switchOffHandler(evt) {
