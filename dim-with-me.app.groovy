@@ -81,6 +81,7 @@ def installed()
 	subscribe(masters, "switch.off", switchOffHandler)
 	subscribe(masters, "switch.setLevel", switchSetLevelHandler)
 	subscribe(masters, "switch", switchSetLevelHandler)
+	subscribe(masters, "level", switchSetLevelHandler)
 }
 
 def updated()
@@ -90,6 +91,7 @@ def updated()
 	subscribe(masters, "switch.off", switchOffHandler)
 	subscribe(masters, "switch.setLevel", switchSetLevelHandler)
 	subscribe(masters, "switch", switchSetLevelHandler)
+	subscribe(masters, "level", switchSetLevelHandler)
 	log.info "subscribed to all of switches events"
 }
 
