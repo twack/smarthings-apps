@@ -81,27 +81,27 @@ preferences {
 
 def installed()
 {
-  initializeSubscriptions()
+	initializeSubscriptions()
 }
 
 def updated()
 {
-  unsubscribe()
-  initializeSubscriptions()
+	unsubscribe()
+	initializeSubscriptions()
 }
 
 def uninstalled()
 {
-  unsubscribe()
+	unsubscribe()
 }
 
 def initializeSubscriptions()
 {
-  subscribe(masters, "switch.on", switchOnHandler)
-  subscribe(masters, "switch.off", switchOffHandler)
-  subscribe(masters, "switch.setLevel", switchSetLevelHandler)
-  subscribe(masters, "level", switchSetLevelHandler)
-  log.info "subscribed to switch events"
+	subscribe(masters, "switch.on", switchOnHandler)
+	subscribe(masters, "switch.off", switchOffHandler)
+	subscribe(masters, "switch.setLevel", switchSetLevelHandler)
+	subscribe(masters, "level", switchSetLevelHandler)
+	log.info "subscribed to switch events"
 }
 
 def switchSetLevelHandler(evt)
