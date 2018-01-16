@@ -97,9 +97,9 @@ def uninstalled()
 
 def initializeSubscriptions()
 {
-	subscribe(masters, "switch.on", switchOnHandler)
-	subscribe(masters, "switch.off", switchOffHandler)
-	subscribe(masters, "switch.setLevel", switchSetLevelHandler)
+  subscribe(masters, "switch.on", switchOnHandler)
+  subscribe(masters, "switch.off", switchOffHandler)
+  subscribe(masters, "switch.setLevel", switchSetLevelHandler)
   subscribe(masters, "level", switchSetLevelHandler)
   log.info "subscribed to switch events"
 }
